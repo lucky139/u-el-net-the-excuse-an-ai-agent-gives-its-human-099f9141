@@ -42,6 +42,11 @@ def main() -> None:
     target.write_text(LINE, encoding="utf-8")
     # The grader collects outputs as another user: leave the file readable.
     os.chmod(target, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+    # Read-back verification: confirm what landed on disk is exactly LINE.
+    roundtrip = target.read_text(encoding="utf-8")
+    assert roundtrip == LINE, "read-back content differs from LINE"
+    assert len(roundtrip) == len(LINE), "read-back length differs from LINE"
+    print(f"verified {target}: {len(roundtrip)} chars, matches LINE")
     print(f"wrote {LINE!r} ({len(LINE)} chars) to {target}")
 
 
